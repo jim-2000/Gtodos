@@ -11,11 +11,6 @@ class Onboaring extends StatelessWidget {
   Widget build(BuildContext context) {
     SharedPreferences prefs;
 
-    isFirstTime() async {
-      prefs = await SharedPreferences.getInstance();
-      prefs.setBool('isFirsttime', false);
-    }
-
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -89,7 +84,6 @@ class Onboaring extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  isFirstTime();
                   Navigator.of(context).pushReplacement(
                       MaterialPageRoute(builder: (ctx) => const Homepage()));
                 },
