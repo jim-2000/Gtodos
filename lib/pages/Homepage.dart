@@ -82,8 +82,25 @@ class _HomepageState extends State<Homepage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 tileColor: Colors.purple.shade600,
-                title: Text(taskcontroller.taskLists[i].title.toString()),
-                subtitle: Text(taskcontroller.taskLists[i].date),
+                title: Text(
+                  taskcontroller.taskLists[i].title.toString().toUpperCase(),
+                  style: const TextStyle(
+                    fontSize: 22,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
+                  overflow: TextOverflow.clip,
+                ),
+                subtitle: Text(
+                  taskcontroller.taskLists[i].date,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    color: Colors.white60,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.end,
+                  overflow: TextOverflow.clip,
+                ),
                 leading: Checkbox(
                     value: taskcontroller.taskLists[i].isCompleted == 0
                         ? false
@@ -114,7 +131,7 @@ class _HomepageState extends State<Homepage> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 ),
                 Text(
-                  "COMPLETED TASK ",
+                  "COMPLETED TASK ${taskcontroller.taskLists.where((task) => task.isCompleted == 1).toList().length} ",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
                 ),
               ],

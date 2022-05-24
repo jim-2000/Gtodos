@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:sqflite/sqflite.dart';
@@ -72,4 +73,7 @@ class DBHelper {
       WHERE id = ?
     ''', [e, id]);
   }
+
+  //
+  static CompletedTask() async {}
 }
