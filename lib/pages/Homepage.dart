@@ -62,6 +62,7 @@ class _HomepageState extends State<Homepage> {
                         ? false
                         : true,
                     onChanged: (e) {
+                      taskcontroller.toggleing(task.id!.toInt(), e!);
                       log(e.toString());
                     }),
               ),
@@ -77,19 +78,21 @@ class _HomepageState extends State<Homepage> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "TOTAL TASK  ${taskcontroller.taskLists.length}",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-              ),
-              Text(
-                "COMPLETED TASK ",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-              ),
-            ],
-          ),
+          Obx(() {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "TOTAL TASK  ${taskcontroller.taskLists.length}",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                ),
+                Text(
+                  "COMPLETED TASK ",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                ),
+              ],
+            );
+          }),
           GestureDetector(
             onTap: () => {
               showModalBottomSheet(

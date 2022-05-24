@@ -25,10 +25,29 @@ class TaskController extends GetxController {
   addTask({required Task task}) async {
     return await DBHelper.insert(task);
   }
+
   //
 
   deleteTask(Task task) async {
     await DBHelper.delete(task);
+    getallTask();
+  }
+
+  // mark true task
+  void markTaskComplete(int id) async {
+    await DBHelper.update(id);
+    getallTask();
+  }
+
+  //
+  void unMarkTaskComplete(int id) async {
+    await DBHelper.updateAgain(id);
+    getallTask();
+  }
+
+  // trying to toggleing
+  void toggleing(int id, bool b) async {
+    b == true ? await DBHelper.toggle(id, 1) : await DBHelper.toggle(id, 0);
     getallTask();
   }
 }
