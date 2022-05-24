@@ -1,7 +1,6 @@
 import 'dart:developer' show log;
 
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:travella/pages/Homepage.dart';
 
 class Onboaring extends StatelessWidget {
@@ -9,8 +8,6 @@ class Onboaring extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    SharedPreferences prefs;
-
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
@@ -84,8 +81,8 @@ class Onboaring extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (ctx) => const Homepage()));
+                  Navigator.pushReplacement(
+                      context, MaterialPageRoute(builder: (ctx) => Homepage()));
                 },
                 child: Container(
                   height: 55,
