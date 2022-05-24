@@ -25,7 +25,19 @@ class _HomepageState extends State<Homepage> {
   Widget build(BuildContext context) {
     final taskcontroller = Get.put(TaskController());
     return Scaffold(
-        appBar: AppBar(),
+        backgroundColor: Colors.purple.shade100,
+        appBar: AppBar(
+          title: Text("Travella"),
+          actions: const [
+            CircleAvatar(
+              backgroundColor: Colors.white,
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                    "https://avatars.githubusercontent.com/u/64397792?s=400&u=b893043c1c3b0a6ef368d9c9e4ee71dda86159c6&v=4"),
+              ),
+            )
+          ],
+        ),
         body: SingleChildScrollView(
           physics: ScrollPhysics(),
           child: Column(
@@ -60,8 +72,16 @@ class _HomepageState extends State<Homepage> {
                   MaterialPageRoute(builder: (c) => TaskDetailse(task: task)));
             },
             child: Card(
+              elevation: 22,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               child: ListTile(
-                contentPadding: EdgeInsets.all(8),
+                contentPadding: const EdgeInsets.all(6),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                tileColor: Colors.purple.shade600,
                 title: Text(taskcontroller.taskLists[i].title.toString()),
                 subtitle: Text(taskcontroller.taskLists[i].date),
                 leading: Checkbox(
