@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:travella/controller/taskController.dart';
 import 'package:travella/model/taskModel.dart';
+import 'package:travella/pages/TaskDetailsPage.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -33,35 +34,44 @@ class _HomepageState extends State<Homepage> {
               SizedBox(
                   height: Get.height / 2,
                   child: Obx(() {
-                    return ListView.builder(
-                        physics: BouncingScrollPhysics(),
-                        itemCount: taskcontroller.taskLists.length,
-                        itemBuilder: (c, i) {
-                          return Card(
-                            child: ListTile(
-                              contentPadding: EdgeInsets.all(8),
-                              title: Text(
-                                  taskcontroller.taskLists[i].title.toString()),
-                              subtitle: Text(taskcontroller.taskLists[i].date),
-                              leading: Checkbox(
-                                  value:
-                                      taskcontroller.taskLists[i].isCompleted ==
-                                              0
-                                          ? false
-                                          : true,
-                                  onChanged: (e) {
-                                    log(e.toString());
-                                  }),
-                            ),
-                          );
-                        });
+                    return showTask(taskcontroller);
                   }))
             ],
           ),
         ));
   }
 
+  ListView showTask(TaskController taskcontroller) {
+    return ListView.builder(
+        physics: BouncingScrollPhysics(),
+        itemCount: taskcontroller.taskLists.length,
+        itemBuilder: (c, i) {
+          final task = taskcontroller.taskLists[i];
+          return InkWell(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (c) => TaskDetailse(task: task)));
+            },
+            child: Card(
+              child: ListTile(
+                contentPadding: EdgeInsets.all(8),
+                title: Text(taskcontroller.taskLists[i].title.toString()),
+                subtitle: Text(taskcontroller.taskLists[i].date),
+                leading: Checkbox(
+                    value: taskcontroller.taskLists[i].isCompleted == 0
+                        ? false
+                        : true,
+                    onChanged: (e) {
+                      log(e.toString());
+                    }),
+              ),
+            ),
+          );
+        });
+  }
+
   Widget buildAddTask() {
+    final taskcontroller = Get.put(TaskController());
     return Container(
       margin: const EdgeInsets.only(left: 20, right: 20, top: 10),
       child: Row(
@@ -69,9 +79,9 @@ class _HomepageState extends State<Homepage> {
         children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children: [
               Text(
-                "TOTAL TASK ",
+                "TOTAL TASK  ${taskcontroller.taskLists.length}",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
               ),
               Text(

@@ -27,8 +27,8 @@ class TaskController extends GetxController {
   }
   //
 
-  deleteTask(int id) {
-    taskLists.removeWhere((element) => element.id == id);
-    update();
+  deleteTask(Task task) async {
+    await DBHelper.delete(task);
+    getallTask();
   }
 }
