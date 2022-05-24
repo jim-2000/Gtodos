@@ -2,6 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:travella/controller/taskController.dart';
+import 'package:travella/model/taskModel.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({Key? key}) : super(key: key);
@@ -13,12 +15,36 @@ class Homepage extends StatefulWidget {
 class _HomepageState extends State<Homepage> {
   @override
   Widget build(BuildContext context) {
+    final taskcontroller = Get.put(TaskController());
     return Scaffold(
         appBar: AppBar(),
-        body: Column(
-          children: [
-            buildAddTask(),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              buildAddTask(),
+              const SizedBox(
+                height: 25,
+              ),
+              SizedBox(
+                  height: Get.height / 2,
+                  child: Obx(() {
+                    return ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: taskcontroller.taskLists.length,
+                        itemBuilder: (c, i) {
+                          return Card(
+                            child: ListTile(
+                              contentPadding: EdgeInsets.all(8),
+                              title: Text(
+                                  taskcontroller.taskLists[i].title.toString()),
+                              leading: Text(
+                                  taskcontroller.taskLists[i].id.toString()),
+                            ),
+                          );
+                        });
+                  }))
+            ],
+          ),
         ));
   }
 
@@ -68,113 +94,131 @@ class _HomepageState extends State<Homepage> {
     );
   }
 
-  Widget _showBottomSheet(BuildContext context) => SingleChildScrollView(
-        child: Container(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          decoration: BoxDecoration(
-            color: Colors.purple.shade200,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const SizedBox(
-                  height: 16,
+  Widget _showBottomSheet(BuildContext context) {
+    final taskcontroller = Get.put(TaskController());
+    final titlecontroller = TextEditingController();
+    final descriptioncontroller = TextEditingController();
+    return SingleChildScrollView(
+      child: Container(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        decoration: BoxDecoration(
+          color: Colors.purple.shade200,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const SizedBox(
+                height: 16,
+              ),
+              const Center(
+                child: Text(
+                  "Add New TASK",
+                  style: TextStyle(fontSize: 34, fontWeight: FontWeight.w700),
                 ),
-                const Center(
-                  child: Text(
-                    "Add New TASK",
-                    style: TextStyle(fontSize: 34, fontWeight: FontWeight.w700),
-                  ),
-                ),
-                Center(
-                  child: Container(
-                    height: 6,
-                    width: 46,
-                    decoration: BoxDecoration(
-                        color: Colors.purple,
-                        borderRadius: BorderRadius.circular(16)),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                Container(
+              ),
+              Center(
+                child: Container(
+                  height: 6,
+                  width: 46,
                   decoration: BoxDecoration(
-                    color: Colors.purple.shade400,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const TextField(
-                    autofocus: true,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                        hintText: "Note title.."),
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                  ),
+                      color: Colors.purple,
+                      borderRadius: BorderRadius.circular(16)),
                 ),
-                const SizedBox(
-                  height: 24,
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.purple.shade400,
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.purple.shade400,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const TextField(
-                    autofocus: true,
-                    decoration: InputDecoration(
+                child: TextField(
+                  controller: titlecontroller,
+                  autofocus: true,
+                  decoration: const InputDecoration(
                       border: InputBorder.none,
                       contentPadding:
                           EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-                      hintText: "Note Description..",
+                      hintText: "Note title.."),
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 24,
+              ),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.purple.shade400,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextField(
+                  controller: descriptioncontroller,
+                  autofocus: true,
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    contentPadding:
+                        EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                    hintText: "Note Description..",
+                  ),
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              InkWell(
+                onTap: () async {
+                  await taskcontroller.addTask(
+                    task: Task(
+                      title: titlecontroller.text,
+                      note: descriptioncontroller.text,
+                      isCompleted: 1,
+                      date: DateTime.now().toIso8601String(),
                     ),
+                  );
+                  log("submit");
+                  taskcontroller.getallTask();
+                  log(taskcontroller.taskLists.length.toString());
+                  Get.back();
+                },
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 10, vertical: 16),
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.purple.shade600,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                      child: Text(
+                    "SUBMIT YOUR NOTE",
                     style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black,
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
                     ),
-                  ),
+                  )),
                 ),
-                const SizedBox(
-                  height: 16,
-                ),
-                InkWell(
-                  onTap: () {
-                    log("submit");
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 10, vertical: 16),
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.purple.shade600,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                        child: Text(
-                      "SUBMIT YOUR NOTE",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    )),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
-      );
+      ),
+    );
+  }
 }
 
 

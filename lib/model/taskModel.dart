@@ -1,18 +1,20 @@
 class Task {
   int? id;
-  String? title;
-  String? note;
-  int? isCompleted;
-  String? date;
-  int? color;
+
+  late String title;
+
+  late String note;
+
+  late int isCompleted;
+
+  late String date;
 
   Task({
     this.id,
-    this.title,
-    this.note,
-    this.isCompleted,
-    this.date,
-    this.color,
+    required this.title,
+    required this.note,
+    required this.isCompleted,
+    required this.date,
   });
   Task.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -20,14 +22,14 @@ class Task {
     note = json['note'];
     isCompleted = json['isCompleted'];
     date = json['date'];
-    color = json['color'];
   }
-  Map<String, dynamic> toJson() => {
-        'id': id,
-        'title': title,
-        'note': note,
-        'isCompleted': isCompleted,
-        'date': date,
-        'color': color,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = id;
+    data['title'] = title;
+    data['note'] = note;
+    data['isCompleted'] = isCompleted;
+    data['date'] = date;
+    return data;
+  }
 }
