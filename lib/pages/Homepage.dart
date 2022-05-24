@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:travella/controller/app_services.dart';
 import 'package:travella/controller/taskController.dart';
 import 'package:travella/model/taskModel.dart';
 import 'package:travella/pages/TaskDetailsPage.dart';
@@ -15,6 +16,12 @@ class Homepage extends StatefulWidget {
 
 class _HomepageState extends State<Homepage> {
   @override
+  @override
+  void initState() {
+    super.initState();
+    AppServicess().afterLonchapp();
+  }
+
   Widget build(BuildContext context) {
     final taskcontroller = Get.put(TaskController());
     return Scaffold(

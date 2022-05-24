@@ -11,8 +11,7 @@ import 'package:travella/pages/onboarding.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // await GetStorage.init();
-
+  await GetStorage.init();
   await DBHelper.initDb();
 
   runApp(
