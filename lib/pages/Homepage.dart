@@ -19,17 +19,22 @@ class _HomepageState extends State<Homepage> {
     return Scaffold(
         appBar: AppBar(),
         body: SingleChildScrollView(
+          physics: ScrollPhysics(),
           child: Column(
+            mainAxisSize: MainAxisSize.max,
             children: [
               buildAddTask(),
               const SizedBox(
                 height: 25,
               ),
+              const SizedBox(
+                height: 20,
+              ),
               SizedBox(
                   height: Get.height / 2,
                   child: Obx(() {
                     return ListView.builder(
-                        shrinkWrap: true,
+                        physics: BouncingScrollPhysics(),
                         itemCount: taskcontroller.taskLists.length,
                         itemBuilder: (c, i) {
                           return Card(
@@ -37,8 +42,16 @@ class _HomepageState extends State<Homepage> {
                               contentPadding: EdgeInsets.all(8),
                               title: Text(
                                   taskcontroller.taskLists[i].title.toString()),
-                              leading: Text(
-                                  taskcontroller.taskLists[i].id.toString()),
+                              subtitle: Text(taskcontroller.taskLists[i].date),
+                              leading: Checkbox(
+                                  value:
+                                      taskcontroller.taskLists[i].isCompleted ==
+                                              0
+                                          ? false
+                                          : true,
+                                  onChanged: (e) {
+                                    log(e.toString());
+                                  }),
                             ),
                           );
                         });
@@ -186,7 +199,7 @@ class _HomepageState extends State<Homepage> {
                     task: Task(
                       title: titlecontroller.text,
                       note: descriptioncontroller.text,
-                      isCompleted: 1,
+                      isCompleted: 0,
                       date: DateTime.now().toIso8601String(),
                     ),
                   );
